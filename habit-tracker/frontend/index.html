@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HabitFlow | Dashboard</title>
+
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+
+  
+  <header class="app-header">
+    <h2>HabitFlow</h2>
+
+    <div class="user-actions">
+      <span id="user-name">Loading...</span>
+      <button id="logout-btn">Logout</button>
+    </div>
+  </header>
+
+  
+  <main class="dashboard">
+
+    <!-- TODAY'S HABITS -->
+    <section class="habits-section">
+      <h3>Today</h3>
+
+      <ul id="habit-list">
+        <!-- Habit items injected here -->
+      </ul>
+
+      <button id="add-habit-btn">+ Add Habit</button>
+    </section>
+
+    <!-- CALENDAR STATUS -->
+    <section class="sync-status">
+      <span id="calendar-status">
+        Checking Google Calendar sync...
+      </span>
+    </section>
+
+  </main>
+
+  <!-- ADD HABIT MODAL -->
+  <div id="add-habit-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Add Habit</h3>
+
+      <form id="add-habit-form">
+        <input
+          type="text"
+          id="habit-title"
+          placeholder="Habit name"
+          required
+        />
+
+        <select id="habit-frequency">
+          <option value="daily">Daily</option>
+        </select>
+
+        <input
+          type="time"
+          id="habit-time"
+          required
+        />
+
+        <div class="modal-actions">
+          <button type="submit">Save</button>
+          <button type="button" id="cancel-modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/habits.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/calendar-status.js"></script>
+</body>
+</html>
