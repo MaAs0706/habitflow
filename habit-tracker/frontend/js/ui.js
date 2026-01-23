@@ -1,6 +1,6 @@
 
 
-import { createHabit, getHabits } from "./habits.js";
+import { createHabit, getHabits,updateHabitCompletion } from "./habits.js";
 
 
 const habitList = document.getElementById("habit-list");
@@ -39,9 +39,10 @@ function renderHabits(habits) {
     const checkbox = li.querySelector("input");
 
     checkbox.addEventListener("change", async () => {
-      await markHabitDone(habit.id);
-      await loadHabits(); // manual refresh
-    });
+  await updateHabitCompletion(habit.id, checkbox.checked);
+  await loadHabits(); // manual refresh
+});
+
 
     habitList.appendChild(li);
   });
