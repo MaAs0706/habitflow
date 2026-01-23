@@ -1,4 +1,4 @@
-// frontend/js/habits.js
+
 
 import {
   collection,
