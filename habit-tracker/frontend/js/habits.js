@@ -31,7 +31,7 @@ export async function createHabit({ title, time, frequency }) {
   });
 }
 
-// DEV ONLY (remove later)
+// DEV ONL Y (remove later)
 window.createHabit = createHabit;
 
 /* 
@@ -49,6 +49,8 @@ export async function getHabits() {
     ...doc.data()
   }));
 }
+
+
 
 /* 
    MARK HABIT DONE

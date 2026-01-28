@@ -1,5 +1,3 @@
-// frontend/js/auth.js
-
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -7,26 +5,35 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-import { auth } from "./config.js";
+//  Firestore imports
+import {
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+import { auth, db } from "./config.js";
 
 // Create Google provider
 const provider = new GoogleAuthProvider();
 
-// Request Google Calendar access (required for this app)
+// Request Google Calendar access
 provider.addScope("https://www.googleapis.com/auth/calendar");
 
-// DOM elements (exist depending on page)
+// DOM elements
 const loginBtn = document.getElementById("google-login-btn");
 const logoutBtn = document.getElementById("logout-btn");
 const userNameEl = document.getElementById("user-name");
 const errorEl = document.getElementById("login-error");
 
-
+/* 
+   LOGIN
+ */
 if (loginBtn) {
   loginBtn.addEventListener("click", async () => {
     try {
       await signInWithPopup(auth, provider);
-      // Redirect handled by auth state listener
     } catch (error) {
       console.error("Login error:", error);
       if (errorEl) {
@@ -36,7 +43,9 @@ if (loginBtn) {
   });
 }
 
-
+/* 
+   LOGOUT
+ */
 if (logoutBtn) {
   logoutBtn.addEventListener("click", async () => {
     await signOut(auth);
@@ -44,23 +53,42 @@ if (logoutBtn) {
   });
 }
 
-
-onAuthStateChanged(auth, (user) => {
+/* 
+   AUTH STATE + USER SETUP
+ */
+onAuthStateChanged(auth, async (user) => {
   const isLoginPage = window.location.pathname.includes("login.html");
 
   if (user) {
-    // User is logged in
+    // UI update
     if (userNameEl) {
       userNameEl.textContent = user.displayName || "User";
     }
 
-    // Prevent logged-in users from seeing login page
+    // 🔹 NEW: ensure user profile exists
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+
+    if (!snap.exists()) {
+      const timezone =
+        Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      const today = new Date().toISOString().split("T")[0];
+
+      await setDoc(userRef, {
+        timezone,
+        lastResetDate: today,
+        createdAt: serverTimestamp()
+      });
+    }
+
+    // Redirect logged-in users away from login page
     if (isLoginPage) {
       window.location.href = "index.html";
     }
 
   } else {
-    // User is NOT logged in
+    // Not logged in → protect dashboard
     if (!isLoginPage) {
       window.location.href = "login.html";
     }

@@ -69,4 +69,13 @@ addHabitForm.addEventListener("submit", async (e) => {
 });
 
 
-document.addEventListener("DOMContentLoaded", loadHabits);
+import { onAuthStateChanged } from 
+  "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+import { auth } from "./config.js";
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    loadHabits();
+  }
+});
